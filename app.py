@@ -1,21 +1,52 @@
-from PyQt6.QtWidgets import QApplication, QWidget
-
-# Only needed for access to command line arguments
 import sys
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+import socket
+from martypy import Marty
+import Controller_Robot
 
-# You need one (and only one) QApplication instance per application.
-# Pass in sys.argv to allow command line arguments for your app.
-# If you know you won't use command line arguments QApplication([]) works too.
-app = QApplication(sys.argv)
+class IHM(QWidget):
+    Robot_controll=Controller_Robot()
 
-# Create a Qt widget, which will be our window.
-window = QWidget()
-window.show()  # IMPORTANT!!!!! Windows are hidden by default.
+    def __init__(self):
+        super().__init__()
 
-# Start the event loop.
-app.exec()
+        self.init_ui()
+
+    def init_ui(self):
+        self.setWindowTitle("Robot Controller")
+
+        self.connect_button = QPushButton("Connecter")
+        self.connect_button.clicked.connect(self.connect_to_robot)
+
+        self.disconnect_button = QPushButton("Déconnecter")
+        self.disconnect_button.clicked.connect(self.disconnect_from_robot)
+        self.disconnect_button.setEnabled(False)
+
+        layout = QVBoxLayout()
+        layout.addWidget(self.connect_button)
+        layout.addWidget(self.disconnect_button)
+
+        self.setLayout(layout)
+
+    
+    def connect_to_robot(self):
+        try:
+            print("Connexion établie avec le robot Marty.")
+            self.Robot_controll.connect_to_robot()
+        except Exception as e:
+            print("Erreur lors de la connexion au robot Marty:", e)
+
+    def disconnect_from_robot(self):
+        try:
+            self.connect_button.setEnabled(True)
+            self.disconnect_button.setEnabled(False)
+            print("Déconnexion du robot Marty.")
+        except Exception as e:
+            print("Erreur lors de la déconnexion du robot Marty:", e)
 
 
-# Your application won't reach here until you exit and the event
-# loop has stopped.
-#dernier commit
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    controller = IHM()
+    controller.show()
+    app.exec()
