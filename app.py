@@ -1,11 +1,9 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
-import socket
-from martypy import Marty
-import Controller_Robot
+from Controller_Robot import Control_Base
 
 class IHM(QWidget):
-    Robot_controll=Controller_Robot()
+    Robot_controll=None
 
     def __init__(self):
         super().__init__()
@@ -28,11 +26,11 @@ class IHM(QWidget):
 
         self.setLayout(layout)
 
-    
+
     def connect_to_robot(self):
         try:
-            print("Connexion établie avec le robot Marty.")
-            self.Robot_controll.connect_to_robot()
+            self.Robot_controll=Control_Base("192.168.0.5")
+            self.Robot_controll.avancer()
         except Exception as e:
             print("Erreur lors de la connexion au robot Marty:", e)
 
