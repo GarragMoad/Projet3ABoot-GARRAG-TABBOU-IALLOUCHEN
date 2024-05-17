@@ -26,7 +26,7 @@ class IHM(QWidget):
 
         self.setLayout(layout)
 
-    
+
     def connect_to_robot(self):
         try:
             self.Robot_controll=Control_Base("192.168.0.5")
