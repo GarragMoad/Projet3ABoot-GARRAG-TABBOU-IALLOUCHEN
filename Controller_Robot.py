@@ -20,12 +20,29 @@ class Control_Base():
         except Exception as e:
             print("Erreur lors de la déconnexion du robot Marty:", e)
 
-    #fonction qui prend en param le sens de rotation
-    def tourner(self,position):
-        self.my_marty.dance(position,3000)
+    
+    def tourner(self):
+        self.my_marty.walk(9,'auto',-10,25,1500)
+
+    def reculer(self):
+        self.my_marty.walk(2,'auto',-10,-25,1500)
     
     def avancer(self):
         self.my_marty.walk(2)
+
+    def danser(self):
+        self.my_marty.dance()
+    
+    def celebrer(self):
+        self.my_marty.celebrate()
+    
+    def be_happy(self):
+        self.my_marty.eyes('excited')
+    
+    def be_sad(self):
+        self.my_marty.eyes('angry')
+    
+        
         
     
 
