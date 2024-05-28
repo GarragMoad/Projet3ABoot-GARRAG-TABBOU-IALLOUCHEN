@@ -37,6 +37,21 @@ class IHM(QWidget):
         self.be_sad_button=QPushButton("Be_sad")
         self.be_sad_button.clicked.connect(self.be_sad)
 
+        self.get_distance_button=QPushButton("couleur")
+        self.get_distance_button.clicked.connect(self.get_couleur)
+
+        self.get_batterie_button=QPushButton("batterie")
+        self.get_batterie_button.clicked.connect(self.get_battery)
+
+        self.get_obstacle_button=QPushButton("check_obstacle")
+        self.get_obstacle_button.clicked.connect(self.check_obsatcle)
+
+        self.droite_boutton=QPushButton("droite")
+        self.droite_boutton.clicked.connect(self.march_droite)
+
+        self.gauche_button=QPushButton("gauche")
+        self.gauche_button.clicked.connect(self.march_gauche)
+
 
 
         layout = QVBoxLayout()
@@ -48,14 +63,19 @@ class IHM(QWidget):
         layout.addWidget(self.danser_button)
         layout.addWidget(self.be_happy_bouton)
         layout.addWidget(self.be_sad_button)
+        layout.addWidget(self.get_batterie_button)
+        layout.addWidget(self.get_distance_button)
+        layout.addWidget(self.get_obstacle_button)
+        layout.addWidget(self.droite_boutton)
+        layout.addWidget(self.gauche_button)
 
         self.setLayout(layout)
 
 
     def connect_to_robot(self):
         try:
-            self.Robot_controll=Control_Base("192.168.0.112")
-            self.Robot_controll.avancer()
+            self.Robot_controll=Control_Base("192.168.0.104")
+            self.Robot_controll.stand_right()
         except Exception as e:
             print("Erreur lors de la connexion au robot Marty:", e)
 
@@ -66,6 +86,18 @@ class IHM(QWidget):
             print("Déconnexion du robot Marty.")
         except Exception as e:
             print("Erreur lors de la déconnexion du robot Marty:", e)
+
+    def march_droite(self):
+        try:
+            self.Robot_controll.pas_chasseD()
+        except Exception as e:
+            print("Erreur dans la fonction pas chasses:", e)
+
+    def march_gauche(self):
+        try:
+            self.Robot_controll.pas_chasseL()
+        except Exception as e:
+            print("Erreur dans la fonction pas chasses:", e)
 
     def tourner(self):
         try:
@@ -108,6 +140,51 @@ class IHM(QWidget):
             self.Robot_controll.be_sad()
         except Exception as e:
             print("Erreur dans la fonction tourner:", e)
+
+    def get_distance(self):
+        try:
+            distance=self.Robot_controll.get_distance()
+            print("Distance:", distance)
+        except Exception as e:
+            print("Erreur dans la fonction tourner:", e)
+
+    def get_battery(self):
+        try:
+            battery=self.Robot_controll.get_battery()
+            print("Batterie:", battery)
+        except Exception as e:
+            print("Erreur dans la fonction batterie:", e)
+
+    def check_obsatcle(self):
+        try:
+            obstacle=self.Robot_controll.obstacle()
+            print("Obstacle:", obstacle)
+        except Exception as e:
+            print("Erreur dans la fonction tourner:", e)
+
+    # def get_couleur(self):
+    #     try:
+    #         couleur=self.Robot_controll.couleur()
+    #         if(couleur>=33 and couleur<=37):
+    #             print("violet")
+    #             self.march_droite()
+    #         if(couleur>=110 and couleur<=114):
+    #             print("rouge")
+    #         if(couleur>=126 and couleur <=129):
+    #             print("jaune")
+    #         if(couleur>=38 and couleur<=39):
+    #             self.march_gauche()
+    #             print("vert")
+            
+    #         print("couleur:", couleur)
+    #     except Exception as e:
+    #         print("Erreur dans la fonction get_couleur:", e)
+
+    def get_couleur(self):
+        try:
+            self.Robot_controll.couleur()
+        except Exception as e:
+            print("Erreur dans la fonction couleur:", e)
 
 
 if __name__ == "__main__":
