@@ -7,6 +7,7 @@ class LoginWindow(QDialog):
     def __init__(self):
         super().__init__()
         self.initUI()
+        #mohamede
 
     def initUI(self):
         self.setWindowTitle('Login')
@@ -169,12 +170,15 @@ class RobotInterface(QWidget):
     
     def getCouleur(self):
         print(self.my_marty.get_color_sensor_hex("left"))
-    
+        print("yoyo")
     def getCouleurs(self):
         print(self.CouleursList)
     
     def calibrateCouler(self,couleur,valeur):
        self.CouleursList[couleur]=valeur
+    def hello():
+          #hhhh
+          print("helo")
 
         
 
