@@ -54,6 +54,16 @@ class RobotInterface(QWidget):
     
     def __init__(self, ip_address):
         super().__init__()
+        self.CouleursList = {
+        'Blue': '#0000FF',          # Bleu
+        'Rouge': '#FF0000',         # Rouge
+        'Vert': '#008000',          # Vert
+        'Jaune': '#FFFF00',         # Jaune
+        'Noir': '#000000',          # Noir
+        'Blue Marin': '#000080',    # Bleu Marine
+        'Rose': '#FFC0CB',          # Rose
+    }
+
         self.ip_address = ip_address
         print(self.ip_address)
         self.my_marty=Marty("wifi",self.ip_address)
@@ -76,7 +86,7 @@ class RobotInterface(QWidget):
         # Direction buttons
         avancer_button = QPushButton("avancer")
         reculer_button = QPushButton("reculer")
-        tourner_button = QPushButton("tourner")
+        tourner_button = QPushButton("couleurs")
 
         avancer_button.setIcon(QIcon('avancer.png'))
         reculer_button.setIcon(QIcon('reculer.png'))
@@ -84,7 +94,7 @@ class RobotInterface(QWidget):
 
         avancer_button.clicked.connect(self.avancer)
         reculer_button.clicked.connect(self.reculer)
-        tourner_button.clicked.connect(self.tourner)
+        tourner_button.clicked.connect(self.getCouleurs)
 
         # Add direction buttons to layout
         control_layout.addWidget(avancer_button, 0, 2)
@@ -156,6 +166,17 @@ class RobotInterface(QWidget):
         
     def obstacle(self):
             return self.my_marty.foot_obstacle_sensed('right')
+    
+    def getCouleur(self):
+        print(self.my_marty.get_color_sensor_hex("left"))
+    
+    def getCouleurs(self):
+        print(self.CouleursList)
+    
+    def calibrateCouler(self,couleur,valeur):
+       self.CouleursList[couleur]=valeur
+
+        
 
 def main():
     app = QApplication(sys.argv)
