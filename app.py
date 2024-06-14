@@ -1,6 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout, QHBoxLayout, QLabel, QGridLayout, QSlider, QDialog, QLineEdit
 from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtCore import Qt
 from martypy import Marty
 from CalibrateInterface import calibrateWindow
 
@@ -15,7 +16,7 @@ class LoginWindow(QDialog):
 
         layout = QVBoxLayout()
 
-        # EntÃªte
+        # EntÃªte           
         header_label = QLabel("ROBOT MARTY")
         layout.addWidget(header_label)
 
@@ -62,6 +63,8 @@ class RobotInterface(QWidget):
     
     def __init__(self, ip_address1,ip_address2):
         super().__init__()
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setFocus()
         self.directionsfusionner=[]
         self.CouleursList1 = {
         'Bleu': '#0000FF',          # Bleu
@@ -124,7 +127,7 @@ class RobotInterface(QWidget):
         tourner_button.clicked.connect(self.tourner)
         calibrer.clicked.connect(self.showCalibrateInterface)
         labyrinte.clicked.connect(self.detectColor)
-        verif1.clicked.connect(self.detectC1)
+        verif1.clicked.connect(self.afficher_pattern_couleurs)
         verif2.clicked.connect(self.detectC2)
 
         # Add direction buttons to layout
@@ -140,13 +143,13 @@ class RobotInterface(QWidget):
 
         # Action buttons with images
         actions = [
-            ('Get Ready', './img/tourner.png', self.stand_right),
-            ('Pas chassé D', './img/pas_chasseD.png',self.pas_chasseD),
-            ('pas chassé G', './img/pas_chasseL.png',self.pas_chasseL),
-            ('danser', './img/celebrate.png',self.danser),
-            ('celebrer', './img/celebrate.png',self.celebrer),
-            ('be_happy', './img/be_Happy.png',self.be_happy),
-            ('be sad', './img/be_sad.png',self.be_sad),
+            ('Get Ready', './img/tourner.jpg', self.stand_right),
+            ('Pas chassé D', './img/pas_chasseD.jpg',self.pas_chasseD),
+            ('pas chassé G', './img/pas_chasseL.jpg',self.pas_chasseL),
+            ('danser', './img/celebrate.jpg',self.danser),
+            ('celebrer', './img/celebrate.jpg',self.celebrer),
+            ('be_happy', './img/be_Happy.jpg',self.be_happy),
+            ('be sad', './img/be_sad.jpg',self.be_sad),
             ('obstacle', '',self.obstacle),
         ]
 
@@ -177,7 +180,7 @@ class RobotInterface(QWidget):
             #self.marty.walk(9,'auto',-10,25,1500)
     def reculer(self):
             self.my_marty.walk(2,'auto',-10,-25,1500)
-            #self.marty.walk(2,'auto',-10,-25,1500)
+            self.marty.walk(2,'auto',-10,-25,1500)
     def avancer(self):
             self.my_marty.walk(2)
             #self.marty.walk(2)
@@ -202,6 +205,18 @@ class RobotInterface(QWidget):
             
     def obstacle(self):
             return self.my_marty.foot_obstacle_sensed('right')
+    
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_Left or event.key() == Qt.Key.Key_4: # type: ignore
+            self.pas_chasseL() # type: ignore
+        elif event.key() == Qt.Key.Key_Right or event.key() == Qt.Key.Key_6: # type: ignore
+            self.pas_chasseD() # type: ignore
+        elif event.key() == Qt.Key.Key_Up or event.key() == Qt.Key.Key_8: # type: ignore
+            self.avancer() # type: ignore
+        elif event.key() == Qt.Key.Key_Down or event.key() == Qt.Key.Key_2: # type: ignore
+            self.reculer() # type: ignore
+        else:
+                    print(f'Key {event.text()} is pressed')
     
     def getCouleur1(self ):
         return self.my_marty.get_color_sensor_hex("left")
@@ -421,9 +436,32 @@ class RobotInterface(QWidget):
             else:
                 self.directionsfusionner.append(item1 if item1 != "Noir" else item2)
          print("Après fusion")
+         self.marty.celebrate()
+         self.my_marty.celebrate()
          print(self.directionsfusionner)
-         return self.directionsfusionner
+
+    def afficher_pattern_couleurs(self):
+        for item in self.directionsfusionner:
+            if item == 'Jaune':
+                self.reculer()
+            elif item == 'Blue':
+                self.my_marty.get_ready()
+                self.my_marty.walk(6, 'auto', 0, -35, 1500, None)
+            elif item == 'Blue Marin':
+                self.my_marty.sidestep('right', 6, 35, 1000, None)
+            elif item == 'Rose':
+                self.my_marty.sidestep('left', 6, 35, 1000, None)
+            elif item == 'Vert':
+                 self.my_marty.walk(6, 'auto', 0, -35, 1500, None)
+            elif item == 'Rouge':
+                self.my_marty.get_ready()
+                self.my_marty.celebrate()
+            else:
+                print(f"Couleur '{item}' non reconnue, aucun pattern affiché.")
             
+            print()  # Ajoute une ligne vide pour séparer les patterns
+
+
     
 
 def main():
