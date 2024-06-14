@@ -12,8 +12,7 @@ class calibrateWindow(QMainWindow):
         self.setWindowTitle("Interface avec Boutons ColorÃ©s")
 
         layout = QVBoxLayout()
-        self.robot = QLabel('Enter le numéro du robot:')
-        self.ip_input = QLineEdit()
+        
 
         # Liste des couleurs et des noms des boutons
         couleurs = [
@@ -45,8 +44,7 @@ class calibrateWindow(QMainWindow):
         hex_code =self.my_marty.get_color_sensor_hex("left")
         infos = f"Couleur sÃ©lectionnÃ©e: {nom}\nCode Hex: {hex_code}"
         self.label_infos.setText(infos)
-        robot=self.robot.text()
-        self.interface.displayColor(nom,hex_code,robot)
+        self.interface.displayColor(nom,hex_code)
 
     def envoyer_couleur_a_marty(self, nom, hex_code):
         
