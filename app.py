@@ -459,7 +459,7 @@ class RobotInterface(QWidget):
             else:
                 print(f"Couleur '{item}' non reconnue, aucun pattern affiché.")
             
-            print()  # Ajoute une ligne vide pour séparer les patterns
+            print()  
 
 
     
